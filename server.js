@@ -1,3 +1,4 @@
+// server file for testing get routes
 const express = require("express");
 const mysql = require("mysql2");
 
@@ -50,4 +51,45 @@ app.get("/api/departments", (req, res) => {
       data: rows,
     });
   });
+});
+
+// Read all Roles
+app.get("/api/roles", (req, res) => {
+  const sql = `SELECT id, department_id, title, salary FROM roles`;
+
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "Success",
+      data: rows,
+    });
+  });
+});
+
+// Read all employees
+app.get("/api/employees", (req, res) => {
+  const sql = `SELECT id, role_id, first_name, last_name, manager_id FROM employees`;
+
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "Success",
+      data: rows,
+    });
+  });
+});
+
+// Response for any other request
+app.use((req, res) => {
+  res.status(404).end();
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
